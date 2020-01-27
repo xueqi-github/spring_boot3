@@ -2,6 +2,7 @@ package com.xue.dao;
 
 import com.xue.mapper.UserMapper;
 import com.xue.pojo.User;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.entity.Example;
@@ -15,11 +16,9 @@ import java.util.List;
 public class UserDao {
     @Autowired
     private UserMapper userMapper;
-
-    public Integer addUser(User user){return userMapper.insert(user);}
-
-    public  Integer addUserList(List<User> userList){
-        return userMapper.insertList(userList);
+    //查询
+    public List<User> findAllUser(){
+        return userMapper.selectAll();
     }
 
     public List<User> findUserByName(String name){
@@ -35,6 +34,18 @@ public class UserDao {
         return userMapper.selectOneByExample(example);
     }
 
+    //添加
+    public Integer addUser(User user){return userMapper.insert(user);}
+
+    public  Integer addUserList(List<User> userList){
+        return userMapper.insertList(userList);
+    }
+
+    //删除
+    public Integer deleteUser(User user){
+        return userMapper.deleteByPrimaryKey(user);
+    }
+
     public Integer deleteUserList(List<Integer> ids){
         Example example = new Example(User.class);
         example.createCriteria()
@@ -42,7 +53,13 @@ public class UserDao {
         return userMapper.deleteByExample(example);
     }
 
-    public Integer updateUserList(List<User> userList){
-        return userMapper.updateUserList(userList);
+    //更新
+    public Integer updateUser(User user){
+        return userMapper.updateByPrimaryKeySelective(user);
     }
+
+    public Integer updateUserList(List<User> userList){
+        return userMapper.updateUserByList(userList);
+    }
+
 }
